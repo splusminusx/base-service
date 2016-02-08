@@ -43,7 +43,9 @@ lazy val service =
         "com.typesafe" % "config" % "1.3.0",
         "com.codacy" %% "scala-consul" % "1.1.0-SNAPSHOT",
         "ch.qos.logback" % "logback-classic" % "1.1.3",
-        "ru.livetex" %% s"$projectName-interface" % s"$projectVersion-SNAPSHOT" withSources()
+        "ru.livetex" %% s"$projectName-interface" % s"$projectVersion-SNAPSHOT" withSources(),
+        "ru.livetex" %% "scala-utils-finagle" % "0.0.1-SNAPSHOT"
+
   )
     ).
     enablePlugins(DockerPlugin).

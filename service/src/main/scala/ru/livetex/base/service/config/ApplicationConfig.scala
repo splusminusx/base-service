@@ -1,27 +1,20 @@
 package ru.livetex.base.service.config
 
-import java.io.File
 
 import com.typesafe.config.ConfigFactory
+import ru.livetex.base.service.endpoint.Endpoint
 
 
-
-case class ApplicationConfig(discovery: DiscoveryConfig,
-                             nativeEndpoint: EndpointConfig,
+case class ApplicationConfig(nativeEndpoint: Endpoint,
                              data: DataConfig)
 
 
 object ApplicationConfig {
-  def apply(path: String): ApplicationConfig = {
+  def apply(data: String): ApplicationConfig = {
 
-    val defaultConfig = new File(path).exists()
-    val config = defaultConfig match {
-      case true => ConfigFactory.parseFile(new File(path))
-      case false => ConfigFactory.parseFile(new File("./etc/config.json"))
-    }
+    val config = ConfigFactory.parseString(data)
 
     ApplicationConfig(
-      DiscoveryConfig(config.getConfig("discovery")),
       EndpointConfig(config.getConfig("endpoints").getConfig("native")),
       DataConfig(config.getConfig("data"))
     )

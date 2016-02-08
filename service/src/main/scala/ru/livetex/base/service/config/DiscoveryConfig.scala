@@ -1,7 +1,7 @@
 package ru.livetex.base.service.config
 
-
-import com.typesafe.config.Config
+import java.io.File
+import com.typesafe.config.ConfigFactory
 
 
 /**
@@ -9,21 +9,30 @@ import com.typesafe.config.Config
   * @param host Discovery service host.
   * @param port Discovery service port.
   * @param circuit Circuit in which search dependencies.
-  * @param profile Service profile.
+  * @param profile Application profile.
+  * @param path application config path.
   */
 case class DiscoveryConfig(host: String,
                            port: Int,
                            circuit: String,
-                           profile: String)
+                           profile: String,
+                           path: String)
 
 object DiscoveryConfig {
-  def apply(config: Config): DiscoveryConfig = {
+  def apply(path: String): DiscoveryConfig = {
+
+    val defaultConfig = new File(path).exists()
+    val config = defaultConfig match {
+      case true => ConfigFactory.parseFile(new File(path))
+      case false => ConfigFactory.parseFile(new File("./etc/config.json"))
+    }
 
     DiscoveryConfig(
       config.getString("host"),
       config.getInt("port"),
       config.getString("circuit"),
-      config.getString("profile")
+      config.getString("profile"),
+      config.getString("path")
     )
   }
 }

@@ -1,39 +1,19 @@
 package ru.livetex.base.service.config
 
-import java.net.InetSocketAddress
-
 import com.typesafe.config.Config
+import ru.livetex.base.service.endpoint.Endpoint
 import scala.collection.JavaConversions._
 
 
-/**
-  * Endpoint configuration.
-  * @param host Discovery service host.
-  * @param port Discovery service port.
-  * @param circuits Circuits in which this endpoint will be available.
-  * @param isPublic Expose endpoint through service discovery.
-  */
-case class EndpointConfig(host: String,
-                          port: Int,
-                          circuits: Seq[String],
-                          isPublic: Boolean) {
-
-  /**
-    * @return IP Socket.
-    */
-  def socket: InetSocketAddress = {
-    new InetSocketAddress(host, port)
-  }
-
-}
-
 object EndpointConfig {
-  def apply(config: Config): EndpointConfig = {
+  def apply(config: Config): Endpoint = {
 
-    EndpointConfig(
+    Endpoint(
       config.getString("host"),
       config.getInt("port"),
       config.getStringList("circuits"),
+      config.getString("protocol"),
+      config.getString("schema"),
       config.getBoolean("isPublic")
     )
   }
